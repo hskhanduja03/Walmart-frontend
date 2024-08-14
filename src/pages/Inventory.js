@@ -6,9 +6,11 @@ import { Link } from "react-router-dom";
 
 function Inventory() {
   const [dashboardData, setDashboardData] = useState(null);
+  const [salesLength, setSalesLength] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
-      const query = `query Products {
+      const queryProducts = `query Products {
         products {
           productName
           offerPercentage
@@ -19,29 +21,42 @@ function Inventory() {
         }
       }`;
 
+      const querySalesLength = `query Query($customerId: String!) {
+        salesLength(customerId: $customerId)
+      }`;
+
       try {
-        const response = await fetch(
-          "https://walmart-backend-7fgd.onrender.com/graphql",
-          {
-            method: "POST", // GraphQL queries typically use POST
+        const [productsResponse, salesResponse] = await Promise.all([
+          fetch("https://walmart-backend-7fgd.onrender.com/graphql", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify({ query: queryProducts }),
+          }),
+          fetch("https://walmart-backend-7fgd.onrender.com/graphql", {
+            method: "POST",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
             body: JSON.stringify({
-              query,
+              query: querySalesLength,
+              variables: { customerId: "your-customer-id" }, // Replace with actual customerId
             }),
-          }
-        );
+          }),
+        ]);
 
-        if (!response.ok) {
+        if (!productsResponse.ok || !salesResponse.ok) {
           throw new Error("Network response was not ok");
         }
 
-        const result = await response.json();
-        const { data } = result;
+        const productsResult = await productsResponse.json();
+        const salesResult = await salesResponse.json();
 
-        setDashboardData(data.products);
+        setDashboardData(productsResult.data.products);
+        setSalesLength(salesResult.data.salesLength);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -57,12 +72,18 @@ function Inventory() {
       <h1 className="flex justify-center text-2xl font-semibold py-5">
         Hey!, Name
       </h1>
-      <section className=" topdasboard body-font">
+      <section className="topdasboard body-font">
         <div className="container px-5 py-10 mx-auto">
           <div className="flex flex-wrap -m-4 justify-center">
-            <Dashboardcartup num={123456} title={"Total"} />
-            <Dashboardcartup num={123456} title={"Active products"} />
-            <Dashboardcartup num={123456} title={"Inactive products"} />
+            {dashboardData && (
+              <Dashboardcartup
+                num={dashboardData.length}
+                title={"Total listed products"}
+              />
+            )}
+            {salesLength !== null && (
+              <Dashboardcartup num={salesLength} title={"Total Sales"} />
+            )}
           </div>
         </div>
       </section>
@@ -72,13 +93,12 @@ function Inventory() {
           <div className="flex flex-wrap justify-center ">
             {dashboardData
               ? dashboardData.map((prod) => (
-                  <Link to={`/products/${prod.productId}`} >
+                  <Link to={`/products/${prod.productId}`} key={prod.productId}>
                     <Dashboardcarddown
-                      key={prod.productId}
                       price={prod.sellingPrice}
                       name={prod.productName}
                       sales={prod.weight + " kg"}
-                      image={"tshirt.png"}
+                      image={prod.images || "tshirt.png"} // Use the image from product data
                     />
                   </Link>
                 ))
