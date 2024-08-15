@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import TopLoader from 'react-top-loading-bar'
 
 function Product() {
-  const {productId}  = useParams(); // Destructure to get the product ID
+  const { productId } = useParams(); // Destructure to get the product ID
   const [product, setProduct] = useState(null); // Use state to store the fetched product data
-  const [loading, setLoading] = useState(true); // To manage loading state
+  const [progress, setProgress] = useState(0);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null); // To manage error state
 
   useEffect(() => {
     const fetchProdData = async () => {
-      const variables = { productId:productId }; // Correctly set the variables
+      const variables = { productId: productId }; // Correctly set the variables
 
       const query = `query Product($productId: String!) {
         product(productId: $productId) {
@@ -32,6 +34,8 @@ function Product() {
       }`;
 
       try {
+        setLoading(true);
+        setProgress(70);
         const response = await fetch(
           "https://walmart-backend-7fgd.onrender.com/graphql",
           {
@@ -52,7 +56,7 @@ function Product() {
         }
 
         const result = await response.json();
-        
+
         const { data } = result;
 
         if (data && data.product) {
@@ -64,20 +68,37 @@ function Product() {
         console.error("Error fetching data:", error);
         setError(error.message); // Update the error state
       } finally {
-        setLoading(false); // Stop loading after the fetch is complete
+        setProgress(100); // Complete the progress bar
+        setLoading(false);
       }
     };
 
     fetchProdData();
   }, [productId]);
 
-  if (loading) return <p>Loading...</p>; // Show loading state
-  if (error) return <p>Error: {error}</p>; // Show error state
+  if (loading)
+    return (
+      <p className="text-center h-screen">
+        <TopLoader
+          progress={progress}
+          color="#00bcd4"
+          height={4}
+          className="absolute top-16 left-0 right-0"
+        />
+        Loading...
+      </p>
+    );
 
   if (!product) return <p>No product found.</p>; // Handle case where no product is found
 
   return (
     <section className="text-gray-600 body-font">
+      <TopLoader
+        progress={progress}
+        color="#00bcd4"
+        height={4}
+        className="absolute top-16 left-0 right-0 z-50"
+      />
       <div className="container px-5 py-24 mx-auto">
         <div className="lg:w-4/5 mx-auto flex flex-wrap">
           <img

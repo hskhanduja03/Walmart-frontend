@@ -75,7 +75,7 @@ function Main() {
     </div>
     </div>
 
-    <div ref={contactref} >
+    <div ref={contactref} className='mx-auto w-[70%]' >
     <Contactus/>
     </div>
     </>

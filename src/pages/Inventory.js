@@ -3,12 +3,17 @@ import Dashboardcartup from "../components/Dashboardcartup";
 import Dashboardcarddown from "../components/Dashboardcarddown";
 import SIdebar from "../components/SIdebar";
 import { Link } from "react-router-dom";
+import TopLoader from "react-top-loading-bar";
 
 function Inventory() {
   const [dashboardData, setDashboardData] = useState(null);
   const [salesLength, setSalesLength] = useState(null);
+  const [progress, setProgress] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
+    setProgress(70);
     const fetchData = async () => {
       const queryProducts = `query Products {
         products {
@@ -58,6 +63,9 @@ function Inventory() {
         setSalesLength(salesResult.data.salesLength);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+        setProgress(100);
       }
     };
 
@@ -69,6 +77,12 @@ function Inventory() {
       <SIdebar />
 
       <h1 className="flex justify-center text-2xl font-semibold py-5">
+        <TopLoader
+          progress={progress}
+          color="#00bcd4"
+          height={4}
+          className="absolute top-16 left-0 right-0 z-50"
+        />
         Hey!, Name
       </h1>
       <section className="topdasboard body-font">
@@ -88,8 +102,8 @@ function Inventory() {
       </section>
 
       <section className="body-font ">
-        <div className="lg:container px-3 py-10 lg:mx-auto bg-white border-2 rounded-xl">
-          <div className="flex flex-wrap justify-center ">
+        <div className="lg:container md:px-3 py-10 lg:mx-auto bg-white border-2 rounded-xl">
+          <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 md:justify-center mx-4 ">
             {dashboardData
               ? dashboardData.map((prod) => (
                   <Link to={`/products/${prod.productId}`} key={prod.productId}>

@@ -1,16 +1,86 @@
-import React from 'react'
-import SIdebar from '../components/SIdebar'
-
+import React, { useEffect, useState } from "react";
+import SIdebar from "../components/SIdebar";
+import TopLoader from 'react-top-loading-bar'
 function Purchases() {
+  const [sales, setSales] = useState([]);
+  const [error, setError] = useState(null);
+  const [progress, setProgress] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  // console.log(userId)
+
+  useEffect(() => {
+    // setUserId(userloggedin.customerId);
+    const fetchSalesDetails = async () => {
+      setLoading(true);
+      setProgress(70);
+
+      const query = `
+     query GetAllSales {
+        sales {
+          totalAmount
+          cumulativeDiscount
+          freightPrice
+          storeId
+          address
+          paymentType
+          saleType
+          saleDate
+         
+        }
+      }
+      `;
+
+      // const variables = { userId };
+
+      try {
+        const response = await fetch(
+          "https://walmart-backend-7fgd.onrender.com/graphql",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify({
+              query,
+            }),
+          }
+        );
+
+        const result = await response.json();
+        // console.log(result);
+
+        if (result.errors) {
+          setError(result.errors[0].message);
+        } else {
+          setSales(result.data.sales);
+        }
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setProgress(100);
+        setLoading(false);
+      }
+    };
+
+    fetchSalesDetails();
+  }, []);
+
   return (
     <>
-     <SIdebar/>
-     
-   <section className="text-gray-600 body-font h-screen">
-  <div className="container px-5 py-24 mx-auto ">
-    <div className="flex flex-col text-center w-full">
-   
-   {/* <header className="text-gray-600 body-font mx-auto">
+      <SIdebar />
+
+      <section className="text-gray-600 body-font h-screen">
+        <TopLoader
+          progress={progress}
+          color="#00bcd4"
+          height={4}
+          className="absolute top-16 left-0 right-0 z-50"
+        />
+        <div className="container px-5 py-24 mx-auto ">
+          <div className="flex flex-col text-center w-full">
+            {/* <header className="text-gray-600 body-font mx-auto">
   <div className=" mx-auto flex flex-wrap p-5 flex-col md:flex-row mt-20 justify-center">
 
     <nav className="mr-auto flex flex-wrap  text-base justify-start">
@@ -21,58 +91,65 @@ function Purchases() {
   </div>
 </header> */}
 
-
-      {/* <h1 className="sm:text-4xl text-3xl font-medium title-font mb-2 text-gray-900">Pricing</h1>
+            {/* <h1 className="sm:text-4xl text-3xl font-medium title-font mb-2 text-gray-900">Pricing</h1>
       <p className="lg:w-2/3 mx-auto leading-relaxed text-base">Banh mi cornhole echo park skateboard authentic crucifix neutra tilde lyft biodiesel artisan direct trade mumblecore 3 wolf moon twee</p> */}
-    </div>
-    <div className=" w-full mx-auto overflow-auto">
-      <table className="table-auto w-full text-left whitespace-no-wrap">
-        <thead>
-          <tr>
-            <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">Amount</th>
-            <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">Status</th>
-            <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">Date</th>
-            <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">Customer</th>
-            <th className="w-10 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr rounded-br"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="px-4 py-3">₹400</td>
-            <td className="px-4 py-3">Pending</td>
-            <td className="px-4 py-3">2/08/24 </td>
-            <td className="px-4 py-3 t//ext-lg text-gray-900">xyz</td>
-          </tr>
-          <tr>
-            <td className="border-t-2 border-gray-200 px-4 py-3">Pro</td>
-            <td className="border-t-2 border-gray-200 px-4 py-3">25 Mb/s</td>
-            <td className="border-t-2 border-gray-200 px-4 py-3">25 GB</td>
-            <td className="border-t-2 border-gray-200 px-4 py-3 text-lg text-gray-900">$24</td>
-            <td className="border-t-2 border-gray-200 w-10 text-center">
-             
-            </td>
-          </tr>
-          <tr>
-            <td className="border-t-2 border-gray-200 px-4 py-3">Business</td>
-            <td className="border-t-2 border-gray-200 px-4 py-3">36 Mb/s</td>
-            <td className="border-t-2 border-gray-200 px-4 py-3">40 GB</td>
-            <td className="border-t-2 border-gray-200 px-4 py-3 text-lg text-gray-900">$50</td>
-            <td className="border-t-2 border-gray-200 w-10 text-center">
-             
-            </td>
-          </tr>
-          <tr>
-            <td className="border-t-2 border-b-2 border-gray-200 px-4 py-3">Exclusive</td>
-            <td className="border-t-2 border-b-2 border-gray-200 px-4 py-3">48 Mb/s</td>
-            <td className="border-t-2 border-b-2 border-gray-200 px-4 py-3">120 GB</td>
-            <td className="border-t-2 border-b-2 border-gray-200 px-4 py-3 text-lg text-gray-900">$72</td>
-            <td className="border-t-2 border-b-2 border-gray-200 w-10 text-center">
-             
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+          </div>
+          <div className="w-full mx-auto overflow-auto">
+            <table className="table-auto w-full text-center whitespace-no-wrap">
+              <thead>
+                <tr>
+                  <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl text-center">
+                    Amount
+                  </th>
+                  <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
+                    CumulativeDiscount
+                  </th>
+                  <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
+                    FreightPrice
+                  </th>
+                  <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
+                    PaymentType
+                  </th>
+                  <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
+                    SaleDate
+                  </th>
+                  <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
+                    StoreId
+                  </th>
+                  <th className="w-10 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr rounded-br text-center"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {sales
+                  ? sales
+                      .filter((item) => item.saleType === "BUY")
+                      .map((item) => (
+                        <tr key={item.storeId}>
+                          <td className="px-4 py-3 text-center">
+                            ₹{item.totalAmount}
+                          </td>
+                          <td className="px-4 py-3 text-center">
+                            {item.cumulativeDiscount}
+                          </td>
+                          <td className="px-4 py-3 text-center">
+                            {item.freightPrice}
+                          </td>
+                          <td className="px-4 py-3 text-center text-gray-900">
+                            {item.paymentType}
+                          </td>
+                          <td className="px-4 py-3 text-center text-gray-900">
+                            {item.saleDate}
+                          </td>
+                          <td className="px-4 py-3 text-center text-gray-900">
+                            {item.storeId}
+                          </td>
+                        </tr>
+                      ))
+                  : "Loading..."}
+              </tbody>
+            </table>
+          </div>
+          {/* <div className="flex pl-4 mt-4 lg:w-2/3 w-full mx-auto">
     {/* <div className="flex pl-4 mt-4 lg:w-2/3 w-full mx-auto">
       <a className="text-indigo-500 inline-flex items-center md:mb-2 lg:mb-0">Learn More
         <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
@@ -81,10 +158,10 @@ function Purchases() {
       </a>
       <button className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Button</button>
     </div> */}
-  </div>
-</section>
+        </div>
+      </section>
     </>
-  )
+  );
 }
 
-export default Purchases
+export default Purchases;
