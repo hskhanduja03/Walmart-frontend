@@ -14,7 +14,6 @@ import Sales from "./pages/Sales";
 import Purchases from "./pages/Purchases";
 import Newproduct from "./pages/Newproduct";
 import Product from "./pages/Product";
-import EmailForm from "./pages/EmailForm";
 // import Newproduct from "./pages/Newproduct";
 
 function App() {
@@ -29,7 +28,6 @@ function App() {
           <Navebar />
           <Routes>
             <Route exact path="/" element={<Landingpage />} />
-            <Route exact path="/email" element={<EmailForm />} />
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/sign" element={<Sign />} />
             <Route exact path="/products/:productId" element={<Product />} />

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 
 function Submain({contactref}) {
 
@@ -16,7 +17,7 @@ function Submain({contactref}) {
 
                         <button onClick={handlecontact} className="text-white items-center bg-gradient-to-r from-amber-500 to-pink-500 border-0 py-1  focus:outline-none hover:bg-yellow-600 rounded text-base mt-4 md:mt-0 "> Contact Us
                         </button>
-                        <button className="text-white items-center bg-gradient-to-r from-amber-500 to-pink-500 border-0 py-1 focus:outline-none hover:bg-yellow-600 rounded text-base mt-4 md:mt-0"> <a href='/Dashboard' >Dashboard</a>
+                        <button className="text-white items-center bg-gradient-to-r from-amber-500 to-pink-500 border-0 py-1 focus:outline-none hover:bg-yellow-600 rounded text-base mt-4 md:mt-0"> <Link to={'/inventory'}>Dashboard</Link>
                         </button>
                         </div>
                     </div>

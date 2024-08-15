@@ -1,9 +1,18 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import Usercontext from "../Context/Usercontext";
 
 function Contactus() {
   const [formStatus, setFormStatus] = useState(null);
   const [isLoading, setIsLoading] = useState(false); // State to manage the loading status
   const [errors, setErrors] = useState({}); // State to manage form errors
+  const {userloggedin}  = useContext(Usercontext)
+  useEffect(()=>{
+    if (userloggedin) {
+      document.getElementById('email').value=userloggedin.email
+      document.getElementById('name').value=userloggedin.name
+    }
+  }, [])
+  
 
   const handleSubmit = async (event) => {
     event.preventDefault(); // Prevent the default form submission
