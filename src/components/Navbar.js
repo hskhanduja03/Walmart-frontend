@@ -64,6 +64,12 @@ function Navbar() {
   // console.log(userloggedin)
   return (
     <>
+    <TopLoader
+        progress={progress}
+        color="#00bcd4"
+        height={4}
+        className="absolute top-16 left-0 right-0"
+      />
 
       <div className="bg-white sticky top-0 w-full z-20 shadow-md overflow-x-hidden">
         <div className="flex flex-wrap items-center justify-between mx-auto p-4">
