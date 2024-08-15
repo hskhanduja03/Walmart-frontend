@@ -21,9 +21,9 @@ function Inventory() {
         }
       }`;
 
-      const querySalesLength = `query Query($customerId: String!) {
-        salesLength(customerId: $customerId)
-      }`;
+      const querySalesLength = `query Query {
+  salesLength
+}`;
 
       try {
         const [productsResponse, salesResponse] = await Promise.all([
@@ -42,8 +42,7 @@ function Inventory() {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
             body: JSON.stringify({
-              query: querySalesLength,
-              variables: { customerId: "your-customer-id" }, // Replace with actual customerId
+              query: querySalesLength, // Replace with actual customerId
             }),
           }),
         ]);
