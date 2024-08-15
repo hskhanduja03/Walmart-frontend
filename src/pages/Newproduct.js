@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ToastContainer, Bounce, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SIdebar from "../components/SIdebar";
 import TopLoader from "react-top-loading-bar";
+import { useLocation } from "react-router";
 // images: [String!]!
 
 function Newproduct() {
@@ -15,6 +16,9 @@ function Newproduct() {
   const [weight, setWeight] = useState("");
   const [quantity, setQuantity] = useState("");
   const [manufactured, setManufactured] = useState("");
+  const {pathname} = useLocation()
+  const [isActive, setIsActive] = useState(false)
+
 
   const [expiry, setExpiry] = useState("");
   const [productname, setProductname] = useState("");
@@ -23,6 +27,9 @@ function Newproduct() {
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(false);
 
+  useEffect(()=>{
+    setIsActive(pathname)
+  }, [])
   const handlechange = (e) => {
     if (e.target.name === "image") setImage(e.target.value);
     if (e.target.name === "batchId") setBatchId(e.target.value);
@@ -41,6 +48,7 @@ function Newproduct() {
 
   const handlesubmit = async (e) => {
     e.preventDefault();
+    
 
     const images = image.split(",").map((img) => img.trim());
     // console.log(images)
@@ -88,7 +96,7 @@ function Newproduct() {
       setLoading(true);
       setProgress(70);
       const response = await fetch(
-        "https://walmart-backend-7fgd.onrender.com/graphql",
+        process.env.REACT_APP_BACKEND_LINK,
         {
           method: "POST",
           headers: {
@@ -142,7 +150,7 @@ function Newproduct() {
 
   return (
     <>
-      <SIdebar />
+      <SIdebar isActive={isActive} />
       <section className="">
         <TopLoader
           progress={progress}

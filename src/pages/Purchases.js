@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from "react";
 import SIdebar from "../components/SIdebar";
 import TopLoader from 'react-top-loading-bar'
+import { useLocation } from "react-router";
 function Purchases() {
   const [sales, setSales] = useState([]);
   const [error, setError] = useState(null);
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(false);
+  const {pathname} = useLocation()
+  const [isActive, setIsActive] = useState(false)
 
   // console.log(userId)
 
   useEffect(() => {
+    setIsActive(pathname)
+
     // setUserId(userloggedin.customerId);
     const fetchSalesDetails = async () => {
       setLoading(true);
@@ -35,7 +40,7 @@ function Purchases() {
 
       try {
         const response = await fetch(
-          "https://walmart-backend-7fgd.onrender.com/graphql",
+          process.env.REACT_APP_BACKEND_LINK,
           {
             method: "POST",
             headers: {
@@ -69,7 +74,7 @@ function Purchases() {
 
   return (
     <>
-      <SIdebar />
+      <SIdebar isActive={isActive} />
 
       <section className="text-gray-600 body-font h-screen">
         <TopLoader

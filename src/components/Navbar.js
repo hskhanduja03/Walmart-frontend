@@ -3,9 +3,9 @@ import "../index.css";
 import { IoCloseCircle } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import Usercontext from "../Context/Usercontext";
-import TopLoader from 'react-top-loading-bar'
 // import { ToastContainer, Bounce, toast } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
+import TopLoader from 'react-top-loading-bar'
 
 function Navbar() {
   const { userloggedin } = useContext(Usercontext);
@@ -14,7 +14,6 @@ function Navbar() {
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false)
 
-
   useEffect(() => {
     if (userloggedin !== null) {
       setLogincheck(false);
@@ -22,30 +21,25 @@ function Navbar() {
       setLogincheck(true);
     }
   }, [userloggedin]);
-
+  
   const handlelogout = () => {
-    localStorage.removeItem("token");
     setLoading(true);
       setProgress(90);
+
+    localStorage.removeItem("token");
 
     setTimeout(() => {
       // 👇️ redirects to an external URL
       window.location.replace("http://localhost:3000/");
     }, 100);
+
     setProgress(100); // Complete the progress bar
     setLoading(false);
   };
   const ref = useRef();
 
   const toggle = () => {
-    setIsOpen(!isOpen)
-    if (ref.current.classList.contains("block")) {
-      ref.current.classList.remove("block");
-      ref.current.classList.add("hidden");
-    } else if (!ref.current.classList.contains("block")) {
-      ref.current.classList.remove("hidden");
-      ref.current.classList.add("block");
-    }
+   setIsOpen(!isOpen)
   };
 
   useEffect(() => {
@@ -64,13 +58,12 @@ function Navbar() {
   // console.log(userloggedin)
   return (
     <>
-    <TopLoader
+      <TopLoader
         progress={progress}
         color="#00bcd4"
         height={4}
         className="absolute top-16 left-0 right-0"
       />
-
       <div className="bg-white sticky top-0 w-full z-20 shadow-md overflow-x-hidden">
         <div className="flex flex-wrap items-center justify-between mx-auto p-4">
           <Link to="/" className="flex items-center space-x-3">
@@ -114,6 +107,17 @@ function Navbar() {
               <li>
                   <Link
                     to="/inventory"
+                    
+                    className="  block py-2 px-3  rounded  md:border-0  md:p-0 mt-1 "
+                  >
+                <button disabled={logincheck} className="disabled:text-gray-400 text-gray-900" >
+                    Inventory
+                </button>
+                  </Link>
+              </li>
+              <li>
+                  <Link
+                    to="/dashboard"
                     
                     className="  block py-2 px-3  rounded  md:border-0  md:p-0 mt-1 "
                   >
@@ -186,6 +190,20 @@ function Navbar() {
           <li>
             <Link
               to="/inventory"
+              className="block py-2 px-2 text-gray-900 rounded md:border-0 md:hover:text-blue-700 md:p-0 mt-1"
+            >
+              <button
+               disabled={logincheck} 
+               className="disabled:text-gray-400"
+              >
+
+              Inventory
+              </button>
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/dashboard"
               className="block py-2 px-2 text-gray-900 rounded md:border-0 md:hover:text-blue-700 md:p-0 mt-1"
             >
               <button

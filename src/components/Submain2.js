@@ -44,7 +44,7 @@ function Submain({ contactref }) {
       <div className="flex justify-center">
         <div className="flex justify-evenly mt-24 w-4/5 md:w-2/5 gap-3">
           <Link
-            to={"/inventory"}
+            to={"/dashboard"}
             className="relative inline-flex items-center justify-center p-4 md:px-12 md:py-3 overflow-hidden font-medium text-indigo-600 transition duration-300 ease-out border-2 border-cyan-500 rounded-lg md:rounded-full shadow-md group bg-cyan-500"
           >
             <span className="absolute inset-0 flex items-center justify-center w-full h-full text-cyan-500 duration-300 -translate-x-full bg-white group-hover:translate-x-0 ease">
