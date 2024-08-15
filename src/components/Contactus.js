@@ -6,12 +6,12 @@ function Contactus() {
   const [isLoading, setIsLoading] = useState(false); // State to manage the loading status
   const [errors, setErrors] = useState({}); // State to manage form errors
   const {userloggedin}  = useContext(Usercontext)
-  useEffect(()=>{
+  useEffect(() => {
     if (userloggedin) {
-      document.getElementById('email').value=userloggedin.email
-      document.getElementById('name').value=userloggedin.name
+      document.getElementById('email').value = userloggedin.email || '';
+      document.getElementById('name').value = userloggedin.name || '';
     }
-  }, [])
+  }, [userloggedin]);
   
 
   const handleSubmit = async (event) => {
