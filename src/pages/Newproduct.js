@@ -162,6 +162,7 @@ function Newproduct() {
           pauseOnHover={false}
           theme="light"
           transition={Bounce} // Corrected prop syntax
+          className={'z-50 top-14'}
         />
         <div className="bg-white md:border-4 rounded-lg shadow  m-10 md:m-20">
           {/* <div className="flex items-start justify-between p-5 border-b rounded-t">
