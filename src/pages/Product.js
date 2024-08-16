@@ -170,8 +170,8 @@ function Product() {
         height={4}
         className="absolute top-16 left-0 right-0 z-50"
       />
-      <div className="flex justify-center mx-auto mt-4 rounded-md ">
-      <button className="items-center justify-center" id="ai" onClick={() => setIsExpanded(!isExpanded)}>
+      <div className="flex justify-center mx-auto mt-4 rounded-md  w-full h-full ">
+      <button className="items-center justify-center h-4 object-contain" id="ai" onClick={() => setIsExpanded(!isExpanded)}>
           <Aisuggetions isExpanded={isExpanded} prediction={prediction} predictionRF={predictionRF} />
         </button>
       </div>
