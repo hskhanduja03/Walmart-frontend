@@ -7,6 +7,7 @@ function Dashboard() {
     const [salesLength, setSalesLength] = useState(null);
     const [progress, setProgress] = useState(0);
     const [loading, setLoading] = useState(false);
+    
 
     useEffect(() => {
         setLoading(true);
