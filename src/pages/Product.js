@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import TopLoader from 'react-top-loading-bar'
+import TopLoader from "react-top-loading-bar";
 import Aisuggetions from "../components/Aisuggetions";
 import useDocumentTitle from "../Hooks/useDocumentTitle";
+// import { TbLoader3 } from "react-icons/tb";
 
 function Product() {
-  useDocumentTitle('Product')
-  const {productId}  = useParams(); // Destructure to get the product ID
+  useDocumentTitle("Product");
+  const { productId } = useParams(); // Destructure to get the product ID
   const [product, setProduct] = useState(null); // Use state to store the fetched product data
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null); // To manage error state
   const [isExpanded, setIsExpanded] = useState(false);
-  const [prediction, setPrediction] = useState(null)
+  const [prediction, setPrediction] = useState(null);
   const [predictionRF, setPredictionRF] = useState(null); // Prediction from /predict_rf
-  
+  const handleAi = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   useEffect(() => {
     const fetchProdData = async () => {
       const variables = { productId: productId }; // Correctly set the variables
@@ -152,28 +156,44 @@ function Product() {
     fetchProdData();
   }, [productId]);
 
-  if (loading) return <p className="text-center h-screen"><TopLoader
-  progress={progress}
-  color="#00bcd4"
-  height={4}
-  className="absolute top-16 left-0 right-0"
-/>Loading...</p>; // Show loading state
+  if (loading)
+    return (
+      <p className="text-center h-screen">
+        <TopLoader
+          progress={progress}
+          color="#00bcd4"
+          height={4}
+          className="absolute top-16 left-0 right-0"
+        />
+        Loading...
+      </p>
+    ); // Show loading state
   // if (error) return <p>Error: {error}</p>; // Show error state
 
   if (!product) return <p>No product found.</p>; // Handle case where no product is found
 
   return (
     <section className="text-gray-600 body-font ">
-       <TopLoader
+      <TopLoader
         progress={progress}
         color="#00bcd4"
         height={4}
         className="absolute top-16 left-0 right-0 z-50"
       />
-      <div className="flex justify-center mx-auto mt-4 rounded-md  w-full h-full ">
-      <button className="items-center justify-center h-4 object-contain" id="ai" onClick={() => setIsExpanded(!isExpanded)}>
-          <Aisuggetions isExpanded={isExpanded} prediction={prediction} predictionRF={predictionRF} />
+      <div className="flex justify-center mx-auto mt-12 rounded-md  w-full h-full ">
+        <button
+          className="items-center justify-center h-4 object-contain flex text-white"
+          id="ai"
+          onClick={handleAi}
+        >
+          <Aisuggetions
+            isExpanded={isExpanded}
+            prediction={prediction}
+            predictionRF={predictionRF}
+          />
+        
         </button>
+
       </div>
       <div className="container px-5 py-24 mx-auto ">
         <div className="lg:w-4/5 mx-auto flex flex-wrap">

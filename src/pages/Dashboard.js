@@ -31,6 +31,7 @@ function Dashboard() {
           costPrice
           sellingPrice
           quantity
+          categoryName
           productId
         }
       }`;
@@ -56,7 +57,7 @@ function Dashboard() {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
             body: JSON.stringify({
-              query: querySalesLength, // Replace with actual customerId
+              query: querySalesLength,
             }),
           }),
         ]);
@@ -92,9 +93,9 @@ function Dashboard() {
       quantity: product.quantity,
     }));
 
-    // Sort by quantity (assumed to represent sales) and take top 5
+    // Sort by profit and take top 5
     const topProducts = productsWithProfit
-      .sort((a, b) => b.quantity - a.quantity)
+      .sort((a, b) => b.profit - a.profit)
       .slice(0, 5);
 
     const labels = topProducts.map(product => product.productName);
@@ -127,6 +128,48 @@ function Dashboard() {
     };
   };
 
+  // Compute the most selling category
+  const getMostSellingCategory = () => {
+    if (!dashboardData) return { categoryName: "", quantity: 0 };
+
+    // Calculate total quantity per category
+    const categoryQuantities = dashboardData.reduce((acc, product) => {
+      acc[product.categoryName] = (acc[product.categoryName] || 0) + product.quantity;
+      return acc;
+    }, {});
+
+    // Find the category with the highest quantity
+    const mostSellingCategory = Object.keys(categoryQuantities).reduce((maxCategory, category) => 
+      categoryQuantities[category] > categoryQuantities[maxCategory] ? category : maxCategory
+    , Object.keys(categoryQuantities)[0]);
+
+    return {
+      categoryName: mostSellingCategory,
+      quantity: categoryQuantities[mostSellingCategory],
+    };
+  };
+
+  // Compute the most profitable product
+  const getMostProfitableProduct = () => {
+    if (!dashboardData) return { productName: "", profit: 0 };
+
+    // Calculate profit for each product
+    const productsWithProfit = dashboardData.map(product => ({
+      productName: product.productName,
+      profit: product.sellingPrice - product.costPrice,
+    }));
+
+    // Find the product with the highest profit
+    const mostProfitableProduct = productsWithProfit.reduce((maxProduct, product) => 
+      product.profit > maxProduct.profit ? product : maxProduct
+    , { productName: "", profit: 0 });
+
+    return mostProfitableProduct;
+  };
+
+  const mostSellingCategory = getMostSellingCategory();
+  const mostProfitableProduct = getMostProfitableProduct();
+
   return (
     <>
       <section className="topdasboard body-font">
@@ -146,6 +189,13 @@ function Dashboard() {
             )}
             {salesLength !== null && (
               <Dashboardcartup num={salesLength} title={"Total Sales"} />
+            )}
+            {mostProfitableProduct && (
+              <Dashboardcartup
+                num={mostProfitableProduct.profit}
+                title={"Most Profitable Product"}
+                subTitle={mostProfitableProduct.productName}
+              />
             )}
           </div>
         </div>
@@ -199,8 +249,62 @@ function Dashboard() {
               }}
             />
           </div>
-          <div className="h-screen flex justify-center items-center border-2 ">
-            graph2
+          <div className="h-screen flex justify-center items-center border-2 p-5 bg-gray-100 rounded-lg shadow-lg">
+            <Bar
+              data={{
+                labels: [mostSellingCategory.categoryName],
+                datasets: [
+                  {
+                    label: 'Quantity Sold',
+                    data: [mostSellingCategory.quantity],
+                    backgroundColor: 'rgba(75, 192, 192, 0.8)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                  },
+                ],
+              }}
+              options={{
+                responsive: true,
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
+                  title: {
+                    display: true,
+                    text: 'Most Selling Category',
+                    font: {
+                      size: 20,
+                    },
+                    color: '#333',
+                  },
+                },
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    grid: {
+                      color: 'rgba(200, 200, 200, 0.2)',
+                    },
+                    ticks: {
+                      color: '#555',
+                      font: {
+                        size: 14,
+                      },
+                    },
+                  },
+                  x: {
+                    grid: {
+                      color: 'rgba(200, 200, 200, 0.2)',
+                    },
+                    ticks: {
+                      color: '#555',
+                      font: {
+                        size: 14,
+                      },
+                    },
+                  },
+                },
+              }}
+            />
           </div>
         </div>
       </section>
