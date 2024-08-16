@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import TopLoader from "react-top-loading-bar";
+import useDocumentTitle from "../Hooks/useDocumentTitle";
+
 
 function Product() {
   const { productId } = useParams(); // Destructure to get the product ID
@@ -9,6 +11,7 @@ function Product() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null); // To manage error state
   const [prediction, setPrediction] = useState(null); // To manage error state
+  useDocumentTitle(product ? `Product- ${product.productName}` : "Product-Loading...");
 
   useEffect(() => {
     const fetchProdData = async () => {

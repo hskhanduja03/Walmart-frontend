@@ -10,3 +10,83 @@
     font-variation-settings:
       "wdth" 100;
   }
+  .glass {
+    background: rgba(255, 255, 255, 0.2); /* Semi-transparent white background */
+    backdrop-filter: blur(10px); /* Blurring effect */
+    -webkit-backdrop-filter: blur(10px); /* For Safari */
+  }
+
+  .login-form {
+    background-color: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(15px);
+    border: 1px solid #fff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    border-right: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 20px;
+    box-shadow: 0 25px 50px rgba(255, 255, 255, 0.1);
+    padding: 4rem;
+    width: 40rem;
+  }
+
+  .frame {
+    position: relative;
+    display: block;
+    /* top: 37vh; */
+}
+
+.frame h1 {
+    text-align: center;
+    color: aliceblue;
+    font-weight: 500;
+}
+
+.frame a {
+    z-index: 1;
+    transition: all .2s;
+    position: relative;
+    max-width: fit-content;
+    display: block;
+    margin: 0 auto;
+}
+
+.frame a:hover {
+    text-decoration: none;
+    transform: translate(-1px,-1px);
+}
+
+.button {
+    display: block;
+    z-index: 0;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    color: #000;
+    text-align: center;
+    background-color: rgba(255,255,255,.3);
+    border-radius: 0.25rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    transition: all .2s;
+    position: relative;
+    transform: translate(0);
+    box-shadow: 1px 1px 1rem rgb(26 26 26 / 15%);
+}
+
+.button:hover {
+    text-decoration: none;
+    transform: translate(-1px,-1px);
+}
+
+.button_bg-grad {
+    z-index: -2;
+    background: linear-gradient(20deg, rgb(114, 94, 244) 0%, rgb(176, 233, 255) 100%);
+    background-position: 0 0;
+    background-size: cover;
+    border-radius: 4px;
+    position: absolute;
+    top: 0%;
+    bottom: 0%;
+    left: 0%;
+    right: 0%;
+    transform: translate(0.5rem,0.5rem);
+    pointer-events: none;
+}
