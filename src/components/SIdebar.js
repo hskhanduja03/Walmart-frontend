@@ -31,7 +31,7 @@ function SIdebar({ setinv, setSales, setpro, newpro, isActive }) {
   return (
     <>
       {/* Button to toggle sidebar */}
-      <div className="fixed left-5 sm:top-[5.5rem] top-[6rem] bg-white rounded-md border-2">
+      <div className="fixed left-5 sm:top-[5.5rem] top-[6rem] bg-white rounded-md border-2 z-50">
         <button
           onClick={togglesidebar}
           className="top-2 h-6 w-6 p-[6px] cursor-pointer flex items-center justify-center rounded-full"

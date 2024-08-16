@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import SIdebar from "../components/SIdebar";
-import TopLoader from 'react-top-loading-bar'
+import TopLoader from "react-top-loading-bar";
+import { FaArrowRight } from "react-icons/fa";
+import Salestable2 from "../components/Salestable2";
 import { useLocation } from "react-router";
 
 function Sales() {
@@ -8,11 +10,15 @@ function Sales() {
   const [error, setError] = useState(null);
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [tablestate, setTablestate] = useState([]);
+  const [blurstate, setBlurstate] = useState(false);
   const {pathname} = useLocation()
   const [isActive, setIsActive] = useState(false)
-
-
   // console.log(userId)
+
+  const table2close = (value) => {
+    if (value) setBlurstate(false);
+  };
 
   useEffect(() => {
     setIsActive(pathname)
@@ -22,7 +28,7 @@ function Sales() {
       setProgress(70);
 
       const query = `
-     query GetAllSales {
+      query GetAllSales {
         sales {
           totalAmount
           cumulativeDiscount
@@ -32,32 +38,33 @@ function Sales() {
           paymentType
           saleType
           saleDate
-         
-        }
-      }
-
-      `;
+          salesDetails {
+            productId
+            sellingPrice
+            quantitySold
+            }
+            }
+            }
+            
+            `;
 
       // const variables = { userId };
 
       try {
-        const response = await fetch(
-          process.env.REACT_APP_BACKEND_LINK,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-            body: JSON.stringify({
-              query,
-            }),
-          }
-        );
+        const response = await fetch(process.env.REACT_APP_BACKEND_LINK, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            query,
+          }),
+        });
 
         const result = await response.json();
         // console.log(result);
-        
+
         if (result.errors) {
           setError(result.errors[0].message);
         } else {
@@ -74,19 +81,27 @@ function Sales() {
     fetchSalesDetails();
   }, []);
 
-  // console.log(sales);
+  const salesmoreInfo = (details) => {
+    setTablestate(details);
+    setBlurstate(true);
+  };
+  // console.log(tablestate);
 
   return (
     <>
       <SIdebar isActive={isActive} />
-      <section className="text-gray-600 body-font h-screen">
-      <TopLoader
-        progress={progress}
-        color="#00bcd4"
-        height={4}
-        className="absolute top-16 left-0 right-0 z-50"
-      />
-        <div className="container px-5 py-24 mx-auto ">
+      <section className="text-gray-600 body-font h-screen ">
+        <TopLoader
+          progress={progress}
+          color="#00bcd4"
+          height={4}
+          className="absolute top-16 left-0 right-0 z-50"
+        />
+        <div
+          className={`container px-5 py-24 mx-auto ${
+            blurstate ? "blur-sm" : "blur-0"
+          }`}
+        >
           <div className="flex flex-col text-center w-full">
             {/* <header className="text-gray-600 body-font mx-auto">
   <div className=" mx-auto flex flex-wrap p-5 flex-col md:flex-row mt-20 justify-center">
@@ -124,35 +139,63 @@ function Sales() {
                   <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
                     StoreId
                   </th>
+                  <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
+                    More Info
+                  </th>
                   <th className="w-10 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr rounded-br text-center"></th>
                 </tr>
               </thead>
               <tbody>
-                {sales ? sales
-                .filter((item) => item.saleType === 'SALE') 
-                .map((item) => (
-                  
-                  <tr key={item.storeId}>
-                    <td className="px-4 py-3 text-center">₹{item.totalAmount}</td>
-                    <td className="px-4 py-3 text-center">{item.cumulativeDiscount}</td>
-                    <td className="px-4 py-3 text-center">{item.freightPrice}</td>
-                    <td className="px-4 py-3 text-center text-gray-900">{item.paymentType}</td>
-                    <td className="px-4 py-3 text-center text-gray-900">{item.saleDate}</td>
-                    <td className="px-4 py-3 text-center text-gray-900">{item.storeId}</td>
-                  </tr>
-                )) : "Loading..."}
+                {sales
+                  ? sales
+                      .filter((item) => item.saleType === "SALE")
+                      .map((item) => (
+                        <tr key={item.storeId}>
+                          <td className="px-4 py-3 text-center">
+                            ₹{item.totalAmount}
+                          </td>
+                          <td className="px-4 py-3 text-center">
+                            {item.cumulativeDiscount}
+                          </td>
+                          <td className="px-4 py-3 text-center">
+                            {item.freightPrice}
+                          </td>
+                          <td className="px-4 py-3 text-center text-gray-900">
+                            {item.paymentType}
+                          </td>
+                          <td className="px-4 py-3 text-center text-gray-900">
+                            {item.saleDate}
+                          </td>
+                          <td className="px-4 py-3 text-center text-gray-900">
+                            {item.storeId}
+                          </td>
+                          <td className=" flex px-4 py-3 justify-center text-center text-gray-900">
+                            <button
+                              disabled={blurstate}
+                              onClick={() => salesmoreInfo(item.salesDetails)}
+                              className="cursor-pointer hover:text-cyan-600 disabled:hover:text-black disabled:cursor-default"
+                            >
+                              <FaArrowRight />
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                  : "Loading..."}
               </tbody>
             </table>
           </div>
-          {/* <div className="flex pl-4 mt-4 lg:w-2/3 w-full mx-auto">
-      <a className="text-indigo-500 inline-flex items-center md:mb-2 lg:mb-0">Learn More
-        <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
-          <path d="M5 12h14M12 5l7 7-7 7"></path>
-        </svg>
-      </a>
-      <button className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Button</button>
-    </div> */}
         </div>
+
+        {blurstate && (<div
+          
+          className='flex justify-center'>
+
+          <Salestable2 
+          tablestate={tablestate} 
+          table2close={table2close}
+          />
+          </div>
+        )} 
       </section>
     </>
   );

@@ -90,3 +90,19 @@
     transform: translate(0.5rem,0.5rem);
     pointer-events: none;
 }
+
+.glass {
+    background: rgba( 251, 251, 251, 0.25 );
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 2px );
+  -webkit-backdrop-filter: blur( 2px );
+  border-radius: 10px;
+  }
+  
+  .glass2{
+    background: rgba( 244, 237, 236, 0.45 );
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 2px );
+    -webkit-backdrop-filter: blur( 2px );
+    border-radius: 10px;
+  }

@@ -1,16 +1,21 @@
-import React, {useEffect, useState } from "react";
+import React, {useEffect, useState , useContext} from "react";
 // import Dashboardcartup from "../components/Dashboardcartup";
 import Dashboardcarddown from "../components/Dashboardcarddown";
 import SIdebar from "../components/SIdebar";
 import { Link, useLocation } from "react-router-dom";
 import TopLoader from 'react-top-loading-bar'
+import Usercontext from "../Context/Usercontext";
+import useDocumentTitle from "../Hooks/useDocumentTitle";
+
 
 // import Usercontext from "../Context/Usercontext";
 
 function Inventory() {
+  useDocumentTitle('Inventory')
   
   const [dashboardData, setDashboardData] = useState(null);
   // const [salesLength, setSalesLength] = useState(null);
+  const {userloggedin} =useContext(Usercontext)
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(false);
   const {pathname} = useLocation()
@@ -99,7 +104,7 @@ function Inventory() {
         className="absolute top-16 left-0 right-0 z-50"
       />
       
-        Hey!, Name
+      Hey! {userloggedin.name}
       </h1>
       <section className="body-font ">
         <div className="lg:container md:px-3 py-10 lg:mx-auto bg-white border-2 rounded-xl">
