@@ -111,7 +111,7 @@ function Product() {
               data.product.sellingPrice - data.product.costPrice, // Profit
               data.product.costPrice || 0, // ProductStandardCost
               data.product.sellingPrice || 0, // ProductListPrice
-              0, // CustomerCreditLimit (Placeholder)
+              5000, // CustomerCreditLimit (Placeholder)
               data.product.quantity || 0, // OrderItemQuantity
               data.product.sellingPrice / (data.product.quantity || 1), // PerUnitPrice
               3, // RegionName (Placeholder)
@@ -166,6 +166,10 @@ function Product() {
           className="absolute top-16 left-0 right-0"
         />
         Loading...
+        <span className="flex flex-col border-blue-400 border text-blue-600 font-semibold p-2 text-xs items-center max-w-xl mx-auto mt-[40vh]">
+          <p>While we load data from ML model</p>
+          <p>Please reload it a few times</p>
+        </span>
       </p>
     ); // Show loading state
   // if (error) return <p>Error: {error}</p>; // Show error state
@@ -191,9 +195,7 @@ function Product() {
             prediction={prediction}
             predictionRF={predictionRF}
           />
-        
         </button>
-
       </div>
       <div className="container px-5 py-24 mx-auto ">
         <div className="lg:w-4/5 mx-auto flex flex-wrap">

@@ -72,8 +72,14 @@ function Navbar() {
               Walmart
             </span>
           </Link>
+          <div>
+            <span className="flex flex-col border-red-400 border p-2 text-xs items-center text-red-600 font-semibold">
+              <p>You might have to reload this site a few times</p> 
+              <p>As our Backend & ML model are deployed on Render🥲</p>
+            </span>
+          </div>
           {userloggedin && (
-            <div className="block md:hidden py-2 ml-auto text-gray-900 rounded font-semibold mt-1">
+            <div className="block md:hidden py-2 ml-auto text-gray-900 rounded font-semibold mt-1 ">
               {userloggedin.name}
             </div>
           )}
@@ -146,8 +152,8 @@ function Navbar() {
               </li>
               {userloggedin && (
                 <li>
-                  <div className="block py-2 px-3 text-gray-900 rounded md:hover:bg-transparent md:border-0 md:p-0 mt-1">
-                    {userloggedin.name}
+                  <div className="block py-2 px-3 text-gray-900 rounded md:hover:bg-transparent md:border-0 md:p-0 mt-1 ">
+                    <p className="border-b-2 pb-2 border-blue-400">{userloggedin.name}</p>
                   </div>
                 </li>
               )}

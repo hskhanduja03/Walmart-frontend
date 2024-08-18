@@ -53,19 +53,16 @@ function Login() {
     try {
       setLoading(true);
       setProgress(70);
-      const response = await fetch(
-        process.env.REACT_APP_BACKEND_LINK,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            query,
-            variables,
-          }),
-        }
-      );
+      const response = await fetch(process.env.REACT_APP_BACKEND_LINK, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query,
+          variables,
+        }),
+      });
 
       const result = await response.json();
       const { data } = result;
@@ -141,10 +138,10 @@ function Login() {
         draggable
         pauseOnHover={false}
         theme="light"
-        transition={Bounce} 
-        className={'z-50 top-14'}// Corrected prop syntax
+        transition={Bounce}
+        className={"z-50 top-14"} // Corrected prop syntax
       />
-       <TopLoader
+      <TopLoader
         progress={progress}
         color="#00bcd4"
         height={4}
@@ -153,11 +150,25 @@ function Login() {
       <div className="min-h-screen flex flex-col items-center justify-center">
         <div className="grid md:grid-cols-2 items-center gap-4 max-md:gap-8 max-w-6xl max-md:max-w-lg w-full p-4 m-4 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] rounded-md">
           <div className="md:max-w-md w-full px-4 py-4">
+            
             <form>
               <div className="mb-12">
                 <h3 className="text-gray-800 text-3xl font-extrabold">
                   Login to your Account
                 </h3>
+                <span className="flex flex-col border-blue-400 border p-2 text-xs items-center  my-2">
+              <p className="text-blue-500 font-semibold">Test User Details</p>
+              <p className="w-full flex justify-around">
+                <span>
+                  <b>Email: </b>
+                  <i>test@gmail.com</i>
+                </span>
+                <span>
+                  <b>Password: </b>
+                  <i>1234</i>
+                </span>
+              </p>
+            </span>
                 <p className="text-sm mt-4 text-gray-800">
                   Don't have an account{" "}
                   <Link
