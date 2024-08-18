@@ -67,7 +67,7 @@ function Navbar() {
       <div className="bg-white sticky top-0 w-full z-20 shadow-md overflow-x-hidden">
         <div className="flex flex-wrap items-center justify-between mx-auto p-4">
           <Link to="/" className="flex items-center space-x-3">
-            <img src="logo512.png" className="h-8" alt="Logo" />
+            <img className="h-12" src="https://res.cloudinary.com/dszaral5w/image/upload/v1723980987/_707c40e8-0410-4a37-b207-405e1252e224-removebg-preview_tiehim.png" alt="Logo" />
             <span className="self-center text-2xl font-semibold whitespace-nowrap">
               Walmart
             </span>
